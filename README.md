@@ -1,2 +1,2 @@
 # wiki
-Documentation
+[Org](wiki.org)
