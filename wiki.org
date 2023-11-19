@@ -1,1 +1,59 @@
 #+title: Wiki
+
+* About API
+- Communicating with bots is done by special protocol, described in this docs.
+- Data exchange is always initiated by server.
+- Server sends requests to a URL, specified in bot's settings.
+- Request type is stored in GET part, data (if it is there) - in body of request POST.
+- All requests are beening send with method POST, except for status (GET).
+- All requests' data stored in JOSN format.
+- All answers from bot, where HTTP status is not equal to 200 counts as error.
+- Even HTTP status 302 will be accepted as an error. Please be careful.
+- API error after first move counts as end of the game, with counting bot as loosed.
+- Approx. all information about the bot you can find in logs on the bot's page.
+
+* Games
+
+** Tic-Tac-Toe
+
+*** Rules
+Tic-Tac-Toe is a game for two players on 3 by 3 board. First player uses "croses", second - "noughts".
+Player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row is the winner.
+It is a solved game, with a forced draw assuming best play from both players.
+
+*** API
+
+**** Requests
+
+For correct work of the bot, you need to make handlers only for these 3 requests:
+1. status: Checking bot's status
+2. start: Start of a new game
+3. turn: Bot's turn
+  
+Other requests are optional, you can ignore them if you want:
+1. finish: End of the game
+2. error: Error message
+
+**** Answears
+
+Format of answer is dependent to specific case. You can read about them all here.
+In case of an error, bot can return any HTTP status execept for 200 (for exemple: 400 Bad Request or 500 Internal Server error) and error message in JSON format:
+#+begin_src js
+{
+  "error": "Wow wow wow, something goes wrong!"
+}
+#+end_src
+This error message and HTTP status will be displayed in bot's page.
+
+**** Game field
+
+Game uses squere grid 3 by 3 as a play field:
+#+begin_src text
+  + --- + --- + --- +
+  | 0,0 | 1,0 | 2,0 |
+  + --- + --- + --- +
+  | 0,1 | 1,1 | 2,1 |
+  + --- + --- + --- +
+  | 0,2 | 1,2 | 2,2 |
+  + --- + --- + --- +
+#+end_src
